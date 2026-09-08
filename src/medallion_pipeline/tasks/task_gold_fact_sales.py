@@ -12,3 +12,7 @@ def main() -> None:
         build_fact_sales(sales),
         config.table_name(config.gold_schema, "fact_sales"),
     )
+
+
+if __name__ == "__main__":
+    main()

@@ -14,3 +14,7 @@ def main() -> None:
         rejected,
         config.table_name(config.quarantine_schema, "products_rejected"),
     )
+
+
+if __name__ == "__main__":
+    main()
