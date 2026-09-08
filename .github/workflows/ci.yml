@@ -10,10 +10,63 @@ permissions:
   contents: read
 
 jobs:
-  quality:
-    name: Lint, type-check, and test
+  formatting:
+    name: Check formatting
     runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install formatting dependencies
+        run: uv sync --locked --only-group formatting --no-install-project
+
+      - name: Check formatting
+        run: uv run --no-sync ruff format --check src tests
+
+  linting:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install linting dependencies
+        run: uv sync --locked --only-group linting --no-install-project
+
+      - name: Lint
+        run: uv run --no-sync ruff check src tests
+
+  type-checking:
+    name: Type check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install type-checking dependencies
+        run: uv sync --locked --only-group type-checking --no-install-project
+
+      - name: Type check
+        run: uv run --no-sync mypy
+
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -29,20 +82,8 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install project Python
-        run: uv python install
-
-      - name: Install locked dependencies
-        run: uv sync --locked --all-groups
-
-      - name: Check formatting
-        run: uv run ruff format --check src tests scripts
-
-      - name: Lint
-        run: uv run ruff check src tests scripts
-
-      - name: Type check
-        run: uv run mypy
+      - name: Install testing dependencies
+        run: uv sync --locked --only-group testing
 
       - name: Run tests
-        run: uv run pytest
+        run: uv run --no-sync pytest
