@@ -1,7 +1,5 @@
-"""Widget-backed runtime configuration for Databricks tasks."""
+"""Widget-backed runtime configuration for Databricks notebooks."""
 
-import argparse
-import sys
 from contextlib import suppress
 from dataclasses import dataclass
 from typing import Any
@@ -46,29 +44,6 @@ def config_from_widgets(dbutils: Any) -> PipelineConfig:
     )
 
 
-def config_from_args() -> PipelineConfig:
-    """Read configuration passed to a Databricks Python script task."""
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--catalog_name", default="codex_cicd_dev")
-    parser.add_argument("--source_path", default=DEFAULT_SOURCE_PATH)
-    parser.add_argument("--bronze_schema", default="bronze")
-    parser.add_argument("--silver_schema", default="silver")
-    parser.add_argument("--gold_schema", default="gold")
-    parser.add_argument("--quarantine_schema", default="quarantine")
-    parser.add_argument("--batch_id", default="manual")
-    args, _ = parser.parse_known_args(sys.argv[1:])
-    return PipelineConfig(
-        catalog_name=args.catalog_name,
-        source_path=args.source_path,
-        bronze_schema=args.bronze_schema,
-        silver_schema=args.silver_schema,
-        gold_schema=args.gold_schema,
-        quarantine_schema=args.quarantine_schema,
-        batch_id=args.batch_id,
-    )
-
-
 def active_spark() -> SparkSession:
     """Return the Databricks-provided active Spark session without creating one."""
 
@@ -88,8 +63,6 @@ def databricks_dbutils(spark: SparkSession) -> Any:
 
 def task_config() -> tuple[SparkSession, PipelineConfig]:
     spark = active_spark()
-    if len(sys.argv) > 1:
-        return spark, config_from_args()
     return spark, config_from_widgets(databricks_dbutils(spark))
 
 
