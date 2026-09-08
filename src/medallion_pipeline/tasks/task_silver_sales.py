@@ -13,3 +13,7 @@ def main() -> None:
     valid_sales, rejected = clean_sales(sales, customers, products)
     write_delta(valid_sales, config.table_name(config.silver_schema, "sales"))
     write_delta(rejected, config.table_name(config.quarantine_schema, "sales_rejected"))
+
+
+if __name__ == "__main__":
+    main()

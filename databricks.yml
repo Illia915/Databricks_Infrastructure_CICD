@@ -8,6 +8,9 @@ variables:
   catalog_name:
     description: Unity Catalog catalog for the selected bundle target.
     default: codex_cicd_dev
+  source_path:
+    description: Unity Catalog Volume path containing the source CSV files.
+    default: /Volumes/codex_cicd_dev/source/source_data
 
 targets:
   dev:
@@ -15,8 +18,10 @@ targets:
     default: true
     variables:
       catalog_name: codex_cicd_dev
+      source_path: /Volumes/codex_cicd_dev/source/source_data
 
   prod:
     mode: production
     variables:
       catalog_name: codex_cicd_prod
+      source_path: /Volumes/codex_cicd_prod/source/source_data

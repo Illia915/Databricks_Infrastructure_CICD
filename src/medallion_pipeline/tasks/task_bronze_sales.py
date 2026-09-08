@@ -15,3 +15,7 @@ def main() -> None:
         config.batch_id,
     )
     write_delta(sales, config.table_name(config.bronze_schema, "sales_raw"))
+
+
+if __name__ == "__main__":
+    main()

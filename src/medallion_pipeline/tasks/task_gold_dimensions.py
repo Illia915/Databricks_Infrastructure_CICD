@@ -17,3 +17,7 @@ def main() -> None:
         build_dim_product(products),
         config.table_name(config.gold_schema, "dim_product"),
     )
+
+
+if __name__ == "__main__":
+    main()
