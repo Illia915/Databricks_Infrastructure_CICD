@@ -1,0 +1,31 @@
+name: Deploy prod
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy prod bundle
+    runs-on: ubuntu-latest
+    environment: prod
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_PROD }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_PROD }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Validate bundle
+        run: databricks bundle validate -t prod
+
+      - name: Deploy bundle
+        run: databricks bundle deploy -t prod
