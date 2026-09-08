@@ -4,25 +4,19 @@ bundle:
 include:
   - resources/*.yml
 
-artifacts:
-  default:
-    type: whl
-    build: uv build --wheel
-    path: .
-
 variables:
   catalog_name:
     description: Unity Catalog catalog for the selected bundle target.
-    default: cicd_dev
+    default: codex_cicd_dev
 
 targets:
   dev:
     mode: development
     default: true
     variables:
-      catalog_name: cicd_dev
+      catalog_name: codex_cicd_dev
 
   prod:
     mode: production
     variables:
-      catalog_name: cicd_prod
+      catalog_name: codex_cicd_prod
