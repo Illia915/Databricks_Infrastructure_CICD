@@ -3,7 +3,11 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+for parent in (Path.cwd(), *Path.cwd().parents):
+    source_root = parent / "src"
+    if (source_root / "medallion_pipeline").is_dir():
+        sys.path.insert(0, str(source_root))
+        break
 
 
 def main() -> None:
