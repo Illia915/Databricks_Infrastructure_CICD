@@ -1,11 +1,16 @@
 """Databricks task: ingest customers.csv into Bronze."""
 
-from medallion_pipeline.shared.bronze_io import read_csv_with_metadata
-from medallion_pipeline.shared.runtime import ensure_schemas, task_config, write_delta
-from medallion_pipeline.shared.schemas import CUSTOMERS_RAW_SCHEMA
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 
 def main() -> None:
+    from medallion_pipeline.shared.bronze_io import read_csv_with_metadata
+    from medallion_pipeline.shared.runtime import ensure_schemas, task_config, write_delta
+    from medallion_pipeline.shared.schemas import CUSTOMERS_RAW_SCHEMA
+
     spark, config = task_config()
     ensure_schemas(spark, config)
     customers = read_csv_with_metadata(

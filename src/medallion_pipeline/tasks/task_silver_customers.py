@@ -1,10 +1,15 @@
 """Databricks task: clean Bronze customers and write Silver/quarantine."""
 
-from medallion_pipeline.shared.runtime import ensure_schemas, task_config, write_delta
-from medallion_pipeline.shared.silver import clean_customers
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 
 def main() -> None:
+    from medallion_pipeline.shared.runtime import ensure_schemas, task_config, write_delta
+    from medallion_pipeline.shared.silver import clean_customers
+
     spark, config = task_config()
     ensure_schemas(spark, config)
     source = spark.table(config.table_name(config.bronze_schema, "customers_raw"))
