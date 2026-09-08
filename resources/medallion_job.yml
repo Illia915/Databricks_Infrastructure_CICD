@@ -22,7 +22,7 @@ resources:
         - task_key: bronze_customers
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_bronze_customers.py
+            python_file: ../src/medallion_pipeline/tasks/task_bronze_customers.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -35,7 +35,7 @@ resources:
         - task_key: bronze_products
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_bronze_products.py
+            python_file: ../src/medallion_pipeline/tasks/task_bronze_products.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -48,7 +48,7 @@ resources:
         - task_key: bronze_sales
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_bronze_sales.py
+            python_file: ../src/medallion_pipeline/tasks/task_bronze_sales.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -64,7 +64,7 @@ resources:
             - task_key: bronze_customers
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_silver_customers.py
+            python_file: ../src/medallion_pipeline/tasks/task_silver_customers.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -79,7 +79,7 @@ resources:
             - task_key: bronze_products
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_silver_products.py
+            python_file: ../src/medallion_pipeline/tasks/task_silver_products.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -96,7 +96,7 @@ resources:
             - task_key: silver_products
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_silver_sales.py
+            python_file: ../src/medallion_pipeline/tasks/task_silver_sales.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -112,7 +112,7 @@ resources:
             - task_key: silver_sales
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_gold_fact_sales.py
+            python_file: ../src/medallion_pipeline/tasks/task_gold_fact_sales.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -128,7 +128,7 @@ resources:
             - task_key: silver_products
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_gold_dimensions.py
+            python_file: ../src/medallion_pipeline/tasks/task_gold_dimensions.py
             source: WORKSPACE
             parameters:
               - --catalog_name
@@ -144,7 +144,7 @@ resources:
             - task_key: silver_products
           environment_key: serverless_python
           spark_python_task:
-            python_file: src/medallion_pipeline/tasks/task_gold_daily_summary.py
+            python_file: ../src/medallion_pipeline/tasks/task_gold_daily_summary.py
             source: WORKSPACE
             parameters:
               - --catalog_name
