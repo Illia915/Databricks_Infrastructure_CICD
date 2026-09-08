@@ -1,0 +1,28 @@
+bundle:
+  name: medallion-pipeline
+
+include:
+  - resources/*.yml
+
+artifacts:
+  default:
+    type: whl
+    build: uv build --wheel
+    path: .
+
+variables:
+  catalog_name:
+    description: Unity Catalog catalog for the selected bundle target.
+    default: cicd_dev
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog_name: cicd_dev
+
+  prod:
+    mode: production
+    variables:
+      catalog_name: cicd_prod
