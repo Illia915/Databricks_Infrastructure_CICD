@@ -85,5 +85,8 @@ jobs:
       - name: Install testing dependencies
         run: uv sync --locked --only-group testing
 
+      - name: Install project package
+        run: uv pip install --editable .
+
       - name: Run tests
         run: uv run --no-sync pytest
