@@ -10,6 +10,24 @@ permissions:
   contents: read
 
 jobs:
+  bundle-validation-dev:
+    name: Validate Databricks bundle (dev)
+    if: github.event.pull_request.base.ref == 'dev'
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST_DEV }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Validate bundle
+        run: databricks bundle validate -t dev
+
   formatting:
     name: Check formatting
     runs-on: ubuntu-latest
