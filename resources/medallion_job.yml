@@ -21,73 +21,53 @@ resources:
         # Bronze ingestion is independent for each source and runs in parallel.
         - task_key: bronze_customers
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_bronze_customers.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_bronze_customers.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         - task_key: bronze_products
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_bronze_products.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_bronze_products.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         - task_key: bronze_sales
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_bronze_sales.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_bronze_sales.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         # Customers and products can be cleaned in parallel after Bronze.
         - task_key: silver_customers
           depends_on:
             - task_key: bronze_customers
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_silver_customers.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_silver_customers.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         - task_key: silver_products
           depends_on:
             - task_key: bronze_products
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_silver_products.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_silver_products.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         - task_key: silver_sales
           depends_on:
@@ -95,61 +75,45 @@ resources:
             - task_key: silver_customers
             - task_key: silver_products
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_silver_sales.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_silver_sales.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         # These Gold tasks are independent and can run in parallel.
         - task_key: gold_fact_sales
           depends_on:
             - task_key: silver_sales
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_gold_fact_sales.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_gold_fact_sales.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         - task_key: gold_dimensions
           depends_on:
             - task_key: silver_customers
             - task_key: silver_products
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_gold_dimensions.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_gold_dimensions.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
 
         - task_key: gold_daily_summary
           depends_on:
             - task_key: gold_fact_sales
             - task_key: silver_products
           environment_key: serverless_python
-          spark_python_task:
-            python_file: ../src/medallion_pipeline/tasks/task_gold_daily_summary.py
-            source: WORKSPACE
-            parameters:
-              - --catalog_name
-              - "{{job.parameters.catalog_name}}"
-              - --source_path
-              - "{{job.parameters.source_path}}"
-              - --batch_id
-              - "{{job.parameters.batch_id}}"
+          notebook_task:
+            notebook_path: ../src/medallion_pipeline/notebooks/tasks/task_gold_daily_summary.ipynb
+            base_parameters:
+              catalog_name: "{{job.parameters.catalog_name}}"
+              source_path: "{{job.parameters.source_path}}"
+              batch_id: "{{job.parameters.batch_id}}"
